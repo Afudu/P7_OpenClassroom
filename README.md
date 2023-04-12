@@ -7,9 +7,10 @@
 **Date:** 04/04/2023
 
 # Abstract
-
-This project consists of creating for a client, JustStreamIt, a website written in HTML, 
-CSS and Vanilla Javascript without any other framework, allowing to visualise featured movie's data.
+This project consists of designing for a client, AlgoInvest&Trade, 
+an algorithm that will maximize their clients’ profits after two years of investment, 
+an algorithm capable of by trying out all the different combinations of shares that fit their constraints, 
+and choose the most profit-yielding shares to buy. 
 
 # Requirement
 
