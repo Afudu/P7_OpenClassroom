@@ -44,12 +44,12 @@ def display_table(list_to_display, headers):
     print(tabulate(list_to_display, headers, tablefmt="simple_grid"))
 
 
-def calculate_cost(share_list):
+def calculate_total_cost(share_list):
     cost = sum(s["cost"] for s in share_list)
     return cost
 
 
-def calculate_profit(share_list):
+def calculate_total_return(share_list):
     profit = sum(s["cost"] * s["profit"] for s in share_list)
     return profit
 
@@ -80,8 +80,8 @@ def brute_force(share_list, budget):
             if binary[j] == "1":
                 selected_shares.append(share_list[j])
         # Calculate the cost and profit of the selected shares
-        cost = calculate_cost(selected_shares)
-        profit = calculate_profit(selected_shares)
+        cost = calculate_total_cost(selected_shares)
+        profit = calculate_total_return(selected_shares)
         # Check if the cost is within the budget and the profit is better than the current best
         if cost <= budget and profit > best_profit:
             best_profit = profit
@@ -99,5 +99,5 @@ for share in shares_to_buy:
 # TABLE_LINES.append(total_line)
 display_table(TABLE_LINES, ['Name', 'Cost', 'Profit'])
 print("")
-print("Total cost:", calculate_cost(shares_to_buy), "eur")
+print("Total cost:", calculate_total_cost(shares_to_buy), "eur")
 print("Total profit:", round(max_profit, 2), "eur")
