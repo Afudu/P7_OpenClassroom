@@ -93,11 +93,11 @@ max_profit, shares_to_buy = brute_force(SHARES, MAX_COST)
 
 print("+++Best combination of shares+++")
 for share in shares_to_buy:
-    line = share["name"], share["cost"], share["profit"], share["gain"]
+    line = share["name"], share["cost"], share["profit"]
     TABLE_LINES.append(line)
 # total_line = "Total", calculate_cost(shares_to_buy), round(max_profit, 2)
 # TABLE_LINES.append(total_line)
-display_table(TABLE_LINES, ['Name', 'Cost', 'Profit', 'Gain'])
+display_table(TABLE_LINES, ['Name', 'Cost', 'Profit'])
 print("")
 print("Total cost:", calculate_cost(shares_to_buy), "eur")
 print("Total profit:", round(max_profit, 2), "eur")
