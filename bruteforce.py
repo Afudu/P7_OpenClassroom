@@ -42,13 +42,19 @@ def calculate_total_return(share_list):
     return total_return_on_investment
 
 
-def brute_force(share_list, budget):
+def brute_force(csv_file, budget):
     """Generate all possible combinations of shares then extract the
     combinations of shares that fit the constraints.
     This algorithm has a time complexity of O(2**n) which can be very slow for large values of n.
     However, it guarantees that we will find the optimal solution."""
+
+    # initialize variables
     best_return = 0
     best_shares = []
+
+    # get csv file
+    share_list = convert_csv_to_list(csv_file)
+
     for i in range(2 ** len(share_list)):  # Generate all possible combinations of shares
         # Convert the index to binary and pad with zeros
         binary = bin(i)[2:].zfill(len(share_list))
@@ -65,7 +71,7 @@ def brute_force(share_list, budget):
         if total_cost <= budget and total_return > best_return:
             best_return = total_return
             best_shares = selected_shares
-    return best_return, best_shares
+    return share_list, best_return, best_shares
 
 
 def display_results(initial_list, return_amount, list_to_display):
@@ -82,9 +88,9 @@ def display_results(initial_list, return_amount, list_to_display):
 
 # display execution time & results
 start_time = time.process_time()
-shares_list = convert_csv_to_list('data/initial_data.csv')
-max_return, shares_to_buy = brute_force(shares_list, MAX_COST)
-display_results(shares_list, max_return, shares_to_buy)
+# shares_list = convert_csv_to_list('data/initial_data.csv')
+initial_list, max_return, shares_to_buy = brute_force(INITIAL_DATA, MAX_COST)
+display_results(initial_list, max_return, shares_to_buy)
 time_elapsed = (time.process_time() - start_time)
 print("")
 print('Program Executed in {} seconds'.format(time_elapsed))
