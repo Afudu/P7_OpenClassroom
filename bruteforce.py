@@ -1,73 +1,53 @@
 from tabulate import tabulate
-# import timeit
+import csv
+import time
 
-# We want the program to try out all the different combinations of shares that fit our constraints,
-# and choose the best result because we want to be as transparent as possible.
-# Again, the program needs to read a file containing information about shares,
-# explore all the possible combinations, and display the best investment.
-# list of limitations:
-#    Each share can only be bought once.
-#    We cannot buy a fraction of a share.
-#    We can spend at most 500 euros per client.
-# # Start developing a brute force solution and send the Python code to Robin in a file (“bruteforce.py”)
-# data = data/initial_data.csv
-
-
-SHARES = [
-    {"name": "Share-1", "cost": 20, "profit": 0.05},
-    {"name": "Share-2", "cost": 30, "profit": 0.1},
-    {"name": "Share-3", "cost": 50, "profit": 0.15},
-    {"name": "Share-4", "cost": 70, "profit": 0.2},
-    {"name": "Share-5", "cost": 60, "profit": 0.17},
-    {"name": "Share-6", "cost": 80, "profit": 0.25},
-    {"name": "Share-7", "cost": 22, "profit": 0.07},
-    {"name": "Share-8", "cost": 26, "profit": 0.11},
-    {"name": "Share-9", "cost": 48, "profit": 0.13},
-    {"name": "Share-10", "cost": 34, "profit": 0.27},
-    {"name": "Share-11", "cost": 42, "profit": 0.17},
-    {"name": "Share-12", "cost": 110, "profit": 0.09},
-    {"name": "Share-13", "cost": 38, "profit": 0.23},
-    {"name": "Share-14", "cost": 14, "profit": 0.01},
-    {"name": "Share-15", "cost": 18, "profit": 0.03},
-    {"name": "Share-16", "cost": 8, "profit": 0.08},
-    {"name": "Share-17", "cost": 4, "profit": 0.12},
-    {"name": "Share-18", "cost": 10, "profit": 0.14},
-    {"name": "Share-19", "cost": 24, "profit": 0.21},
-    {"name": "Share-20", "cost": 114, "profit": 0.18}
-]
+"""
+Project brief
+Part 1:“bruteforce.py” - program to try out all the different combinations of shares that fit constraints,
+and choose the best result because we want to be as transparent as possible.
+Again, the program needs to read a file containing information about shares,
+explore all the possible combinations, and display the best investment.
+list of limitations:
+   Each share can only be bought once.
+   We cannot buy a fraction of a share.
+   We can spend at most 500 euros per client.
+==>Start developing a brute force solution and send the Python code to Robin in a file (“bruteforce.py”)
+"""
 
 MAX_COST = 500
-TABLE_LINES = []
+INITIAL_DATA = 'data/initial_data.csv'
 
 
-def display_table(list_to_display, headers):
-    print(tabulate(list_to_display, headers, tablefmt="simple_grid"))
+def convert_csv_to_list(csv_file):
+    """ reads a csv file and converts its data into a list"""
+    shares = []
+    with open(csv_file, 'r') as f:
+        reader = csv.reader(f)
+        next(reader)  # skip header row
+        for row in reader:
+            shares.append((row[0], float(row[1]), float(row[2])))
+    return shares
 
 
 def calculate_total_cost(share_list):
-    cost = sum(s["cost"] for s in share_list)
-    return cost
+    """calculates the sum of the costs in column of the list"""
+    total_cost = sum(s[1] for s in share_list)
+    return total_cost
 
 
 def calculate_total_return(share_list):
-    profit = sum(s["cost"] * s["profit"] for s in share_list)
-    return profit
-
-
-# def get_selected_shares(share_list):
-#     for i in range(2 ** len(share_list)):  # Generate all possible combinations of shares
-#         # Convert the index to binary and pad with zeros
-#         binary = bin(i)[2:].zfill(len(share_list))
-#         # Create a list of potential shares to buy
-#
-#         for j in range(len(share_list)):
-#             if binary[j] == "1":
-#                 selected_shares.append(share_list[j])
-#     return selected_shares
+    """calculates the sum of returns of the list = cost by profit"""
+    total_return_on_investment = sum(s[1] * s[2] for s in share_list)
+    return total_return_on_investment
 
 
 def brute_force(share_list, budget):
-    best_profit = 0
+    """Generate all possible combinations of shares then extract the
+    combinations of shares that fit the constraints.
+    This algorithm has a time complexity of O(2**n) which can be very slow for large values of n.
+    However, it guarantees that we will find the optimal solution."""
+    best_return = 0
     best_shares = []
     for i in range(2 ** len(share_list)):  # Generate all possible combinations of shares
         # Convert the index to binary and pad with zeros
@@ -75,29 +55,37 @@ def brute_force(share_list, budget):
         # Create a list of potential shares to buy
         selected_shares = []
         for j in range(len(share_list)):
-            # gain = share_list[j]['cost'] * share_list[j]["profit"]
-            # share_list[j]['gain'] = gain
+            # select shares
             if binary[j] == "1":
                 selected_shares.append(share_list[j])
         # Calculate the cost and profit of the selected shares
-        cost = calculate_total_cost(selected_shares)
-        profit = calculate_total_return(selected_shares)
+        total_cost = calculate_total_cost(selected_shares)
+        total_return = calculate_total_return(selected_shares)
         # Check if the cost is within the budget and the profit is better than the current best
-        if cost <= budget and profit > best_profit:
-            best_profit = profit
+        if total_cost <= budget and total_return > best_return:
+            best_return = total_return
             best_shares = selected_shares
-    return best_profit, best_shares
+    return best_return, best_shares
 
 
-max_profit, shares_to_buy = brute_force(SHARES, MAX_COST)
+def display_results(initial_list, return_amount, list_to_display):
+    """ displays a list using tabulate module"""
+    print("Best combination of shares to buy")
+    print(tabulate(list_to_display, ['Shares', 'Cost', 'Profit'], tablefmt="simple_grid"))
 
-print("+++Best combination of shares+++")
-for share in shares_to_buy:
-    line = share["name"], share["cost"], share["profit"]
-    TABLE_LINES.append(line)
-# total_line = "Total", calculate_cost(shares_to_buy), round(max_profit, 2)
-# TABLE_LINES.append(total_line)
-display_table(TABLE_LINES, ['Name', 'Cost', 'Profit'])
+    print("++++++++++Summary+++++++++")
+    print("Initial number of shares:", len(initial_list))
+    print("Number of shares to buy:", len(list_to_display))
+    print("Total cost:", calculate_total_cost(list_to_display), "eur")
+    print("Total return:", round(return_amount, 2), "eur")
+
+
+# display execution time & results
+start_time = time.process_time()
+shares_list = convert_csv_to_list('data/initial_data.csv')
+max_return, shares_to_buy = brute_force(shares_list, MAX_COST)
+display_results(shares_list, max_return, shares_to_buy)
+time_elapsed = (time.process_time() - start_time)
 print("")
-print("Total cost:", calculate_total_cost(shares_to_buy), "eur")
-print("Total profit:", round(max_profit, 2), "eur")
+print('Program Executed in {} seconds'.format(time_elapsed))
+# Program Executed in 4.28125 seconds
