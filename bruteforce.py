@@ -86,7 +86,6 @@ def display_results(initial_list, return_amount, list_to_display):
 
 # display execution time & results
 start_time = time.process_time()
-# shares_list = convert_csv_to_list('data/initial_data.csv')
 shares_list, max_return, shares_to_buy = brute_force(INITIAL_DATA, MAX_COST)
 display_results(shares_list, max_return, shares_to_buy)
 time_elapsed = (time.process_time() - start_time)
