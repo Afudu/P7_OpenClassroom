@@ -31,7 +31,7 @@ def convert_csv_to_list(csv_file):
 
 
 def calculate_total_cost(share_list):
-    """calculates the sum of the costs in column of the list"""
+    """calculates the sum of the costs - 2nd column of the list"""
     total_cost = sum(s[1] for s in share_list)
     return total_cost
 
