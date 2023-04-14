@@ -79,6 +79,7 @@ def display_results(initial_list, return_amount, list_to_display):
     print("")
     print("++++++++++Summary+++++++++")
     print("Initial number of shares:", len(initial_list))
+    print("Max spending:", MAX_COST, "eur")
     print("Number of shares to buy:", len(list_to_display))
     print("Total cost:", calculate_total_cost(list_to_display), "eur")
     print("Total return:", round(return_amount, 2), "eur")
