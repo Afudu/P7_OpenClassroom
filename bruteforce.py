@@ -4,9 +4,7 @@ import time
 
 """
 Project brief
-Part 1:“bruteforce.py” - program to try out all the different combinations of shares that fit constraints,
-and choose the best result because we want to be as transparent as possible.
-Again, the program needs to read a file containing information about shares,
+Part 1:“bruteforce.py” - the program needs to read a file containing information about shares,
 explore all the possible combinations, and display the best investment.
 list of limitations:
    Each share can only be bought once.
@@ -43,10 +41,9 @@ def calculate_total_return(share_list):
 
 
 def brute_force(csv_file, budget):
-    """Generate all possible combinations of shares then extract the
-    combinations of shares that fit the constraints.
-    This algorithm has a time complexity of O(2**n) which can be very slow for large values of n.
-    However, it guarantees that we will find the optimal solution."""
+    """Function reading the shares from a csv file, generate all possible combinations of shares
+    then extract the combinations of shares that fit the client constraints.
+    Algorithm time complexity: O(2**n) - slow for large values of n but guarantees optimal solution."""
 
     # initialize variables
     best_return = 0
@@ -55,7 +52,8 @@ def brute_force(csv_file, budget):
     # get csv file
     share_list = convert_csv_to_list(csv_file)
 
-    for i in range(2 ** len(share_list)):  # Generate all possible combinations of shares
+    # Generate all possible combinations of shares - 2^n
+    for i in range(2 ** len(share_list)):
         # Convert the index to binary and pad with zeros
         binary = bin(i)[2:].zfill(len(share_list))
         # Create a list of potential shares to buy
@@ -78,7 +76,7 @@ def display_results(initial_list, return_amount, list_to_display):
     """ displays a list using tabulate module"""
     print("Best combination of shares to buy")
     print(tabulate(list_to_display, ['Shares', 'Cost', 'Profit'], tablefmt="simple_grid"))
-
+    print("")
     print("++++++++++Summary+++++++++")
     print("Initial number of shares:", len(initial_list))
     print("Number of shares to buy:", len(list_to_display))
