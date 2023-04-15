@@ -54,9 +54,9 @@ The following commands rely on the knowledge of how to use the terminal (Unix, m
 
 # Running the application
 
-To run the application, in the terminal (Unix, macOS) or command line (Windows):
+To run each of the four scripts, in the terminal (Unix, macOS) or command line (Windows):
 
-  python bruteforce.py
+python script_file.py
 
 # PEP 8 adherence
 
