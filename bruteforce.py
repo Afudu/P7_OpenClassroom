@@ -19,13 +19,13 @@ INITIAL_DATA = 'data/initial_data.csv'
 
 def convert_csv_to_list(csv_file):
     """ reads a csv file and converts its data into a list"""
-    shares = []
+    list_of_shares = []
     with open(csv_file, 'r') as f:
         reader = csv.reader(f)
         next(reader)  # skip header row
         for row in reader:
-            shares.append((row[0], float(row[1]), float(row[2])))
-    return shares
+            list_of_shares.append((row[0], float(row[1]), float(row[2])))
+    return list_of_shares
 
 
 def calculate_total_cost(share_list):
@@ -50,18 +50,18 @@ def brute_force(csv_file, budget):
     best_shares = []
 
     # get csv file
-    share_list = convert_csv_to_list(csv_file)
+    shares_list = convert_csv_to_list(csv_file)
 
     # Generate all possible combinations of shares - 2^n
-    for i in range(2 ** len(share_list)):
+    for i in range(2 ** len(shares_list)):
         # Convert the index to binary and pad with zeros
-        binary = bin(i)[2:].zfill(len(share_list))
+        binary = bin(i)[2:].zfill(len(shares_list))
         # Create a list of potential shares to buy
         selected_shares = []
-        for j in range(len(share_list)):
+        for j in range(len(shares_list)):
             # select shares
             if binary[j] == "1":
-                selected_shares.append(share_list[j])
+                selected_shares.append(shares_list[j])
         # Calculate the cost and profit of the selected shares
         total_cost = calculate_total_cost(selected_shares)
         total_return = calculate_total_return(selected_shares)
@@ -69,7 +69,7 @@ def brute_force(csv_file, budget):
         if total_cost <= budget and total_return > best_return:
             best_return = total_return
             best_shares = selected_shares
-    return share_list, best_return, best_shares
+    return shares_list, best_return, best_shares
 
 
 def display_results(initial_list, return_amount, list_to_display):
@@ -87,8 +87,8 @@ def display_results(initial_list, return_amount, list_to_display):
 
 # display execution time & results
 start_time = time.process_time()
-shares_list, max_return, shares_to_buy = brute_force(INITIAL_DATA, MAX_COST)
-display_results(shares_list, max_return, shares_to_buy)
+shares, max_return, shares_to_buy = brute_force(INITIAL_DATA, MAX_COST)
+display_results(shares, max_return, shares_to_buy)
 time_elapsed = (time.process_time() - start_time)
 print("")
 print('Program Executed in {} seconds'.format(time_elapsed))
