@@ -62,4 +62,4 @@ print(optimize_shares('data/initial_data.csv', 500))
 end_time = time.time()
 print("")
 print(f'Execution time: {end_time - start_time:.4f} seconds')
-# Execution time: 1.9236 seconds - well below requirement.
+# Execution time: 1.9236 seconds - well above requirement.
