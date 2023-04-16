@@ -16,6 +16,7 @@ old/
 Notes/
 data/
 optimized.py
+knapsack/
 
 # Translations
 *.mo
