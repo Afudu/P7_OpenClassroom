@@ -9,8 +9,8 @@
 # Abstract
 This project consists of designing for a client, AlgoInvest&Trade, 
 an algorithm that will maximize their clients’ profits after two years of investment, 
-an algorithm capable of trying out all the different combinations of shares that fit their constraints, 
-and choose the most profit-yielding shares to buy. 
+an algorithm capable of trying out all the different combinations of shares that fit the constraints, 
+and choose the most profit-yielding shares to buy in less than a second. 
 
 # Requirement
 
