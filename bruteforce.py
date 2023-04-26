@@ -1,35 +1,37 @@
-from tabulate import tabulate
 import csv
+from itertools import combinations as comb
 import time
 
 """
-Project brief
-Part 1:“bruteforce.py” - the program needs to read a file containing information about shares,
+Project brief - Part 1: create “bruteforce.py” 
+- the program needs to read a file containing information about shares,
 explore all the possible combinations, and display the best investment.
 list of limitations:
    Each share can only be bought once.
    We cannot buy a fraction of a share.
    We can spend at most 500 euros per client.
-==>Start developing a brute force solution and send the Python code to Robin in a file (“bruteforce.py”)
 """
 
 MAX_COST = 500
-INITIAL_DATA = 'data/initial_data.csv'
+INITIAL_DATASET = 'data/initial_data.csv'
 
 
 def convert_csv_to_list(csv_file):
-    """ reads a csv file and converts its data into a list"""
-    list_of_shares = []
+    shares = []
     with open(csv_file, 'r') as f:
         reader = csv.reader(f)
         next(reader)  # skip header row
         for row in reader:
-            list_of_shares.append((row[0], float(row[1]), float(row[2])))
-    return list_of_shares
+            shares.append((
+                row[0],
+                float(row[1]),
+                float(row[2])
+            ))
+    return shares
 
 
 def calculate_total_cost(share_list):
-    """calculates the sum of the costs - 2nd column of the list"""
+    """calculates the sum of the costs in column of the list"""
     total_cost = sum(s[1] for s in share_list)
     return total_cost
 
@@ -40,56 +42,46 @@ def calculate_total_return(share_list):
     return total_return_on_investment
 
 
-def brute_force(csv_file, budget):
-    """Function reading the shares from a csv file, generate all possible combinations of shares
-    then extract the combinations of shares that fit the client constraints.
-    Algorithm time complexity: O(2**n) - slow for large values of n but guarantees optimal solution."""
-
-    # initialize variables
+def bruteforce_shares(csv_file, max_cost):
+    """
+    The function reads in a CSV file containing share data, loops over the list, uses
+    itertools.combinations to generate all possible combinations of shares costing less or equal to max_cost,
+    then calculates the best cost, return and shares.
+    Algorithm time complexity: O(n*n!)
+    """
+    best_cost = 0
     best_return = 0
     best_shares = []
 
-    # get csv file
-    shares_list = convert_csv_to_list(csv_file)
+    # convert csv_file to list of tuples
+    share_list = convert_csv_to_list(csv_file)
 
-    # Generate all possible combinations of shares - 2^n
-    for i in range(2 ** len(shares_list)):
-        # Convert the index to binary and pad with zeros
-        binary = bin(i)[2:].zfill(len(shares_list))
-        # Create a list of potential shares to buy
-        selected_shares = []
-        for j in range(len(shares_list)):
-            # select shares
-            if binary[j] == "1":
-                selected_shares.append(shares_list[j])
-        # Calculate the cost and profit of the selected shares
-        total_cost = calculate_total_cost(selected_shares)
-        total_return = calculate_total_return(selected_shares)
-        # Check if the cost is within the budget and the profit is better than the current best
-        if total_cost <= budget and total_return > best_return:
-            best_return = total_return
-            best_shares = selected_shares
-    return shares_list, best_return, best_shares
+    # Try out all possible i combinations of shares
+    for i in range(1, len(share_list) + 1):
+        for combination in comb(share_list, i):
+            total_cost = calculate_total_cost(combination)
+            if total_cost <= max_cost:
+                total_return = calculate_total_return(combination)
+                if total_return > best_return:
+                    best_return = total_return
+                    best_shares = combination
+                    best_cost = total_cost
+    # Return the best cost, return, and combination of shares
+    return best_cost, best_return, best_shares
 
 
-def display_results(initial_list, return_amount, list_to_display):
-    """ displays a list using tabulate module"""
-    print("Best combination of shares to buy")
-    print(tabulate(list_to_display, ['Shares', 'Cost', 'Profit'], tablefmt="simple_grid"))
-    print("")
-    print("++++++++++Summary+++++++++")
-    print("Initial number of shares:", len(initial_list))
-    print("Max spending:", MAX_COST, "eur")
-    print("Number of shares to buy:", len(list_to_display))
-    print("Total cost:", calculate_total_cost(list_to_display), "eur")
-    print("Total return:", round(return_amount, 2), "eur")
+# compile results & calculate execution time
+start_time = time.time()
+best_c, best_r, best_s = bruteforce_shares(INITIAL_DATASET, MAX_COST)
+end_time = time.time()
 
-
-# display execution time & results
-start_time = time.process_time()
-shares, max_return, shares_to_buy = brute_force(INITIAL_DATA, MAX_COST)
-display_results(shares, max_return, shares_to_buy)
-time_elapsed = (time.process_time() - start_time)
+# display results
 print("")
-print('Program Executed in {} seconds'.format(time_elapsed))
-# Program Executed in 4.28125 seconds
+print("*********Results - Initial Dataset***********")
+print("Budget:", "€", MAX_COST)
+print(f'Best combination of shares({len(best_s)}): {[best[0] for best in best_s]}')
+print("Total cost:", "€", best_c)
+print("Total return value:", "€", round(best_r, 2))
+print("")
+print(f'Execution time: {end_time - start_time:.4f} seconds')
+# Execution time: ~ 2.2 seconds - above requirement.
