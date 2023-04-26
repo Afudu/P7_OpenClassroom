@@ -13,8 +13,11 @@ __pycache__/
 *.zip
 p7_env/
 old/
+copies/
+Reserves/
+Tests/
 Notes/
-data/
+data/save/
 optimized.py
 knapsack/
 
