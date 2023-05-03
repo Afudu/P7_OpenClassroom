@@ -48,7 +48,7 @@ def optimized_dynamic(max_cost, dataset):
     # We create a matrix (table) where the rows are the shares,
     # and the columns are the max_weight amounts.
     # Then we initialize the table with zeros.
-    items = len(cleaned_dataset)
+    items = len(dataset)
     table = [[0 for x in range(max_cost + 1)] for y in range(items + 1)]
 
     # 1st: iterate over rows = dataset --> height
