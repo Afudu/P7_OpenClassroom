@@ -18,7 +18,7 @@ then suggest a list of the most profit-yielding ones within the constraints.
 
 This problem is known as the 01 knapsack problem.
 
-The client would like to approach the resolution of the problem in two parts:
+We will approach the resolution of the problem in two parts:
 
 **Part1:** We create first for a list of 20 shares, a brute-force solution that will try out 
 all the different combinations of shares then return the combination with the highest profit within the constraints. 
