@@ -1,95 +1,147 @@
-# The knapsack_01_recursive_dp code is contributed by Prosun Kumar Sarkar
-# https://www.geeksforgeeks.org/0-1-knapsack-problem-dp-10/
-
 import csv
 import time
 
-MAX_COST = 500
-INITIAL_DATA = 'data/initial_data.csv'
+"""
+This script contains the implementation of Part2 of the Project Brief: create “optimized.py”.
+The optimized version of bruteforce.py
+"""
 
 
-# This is the memoization approach of 0 / 1 Knapsack in Python in simple we can say recursion + memoization = DP
-
-def convert_csv_to_list(csv_file):
-    """ reads a csv file and converts its data into a list"""
-    list_of_shares = []
-    with open(csv_file, 'r') as f:
+def get_cleaned_data(csv_file):
+    """ This function reads a dataset in a csv file with initially 3 columns (name, cost, and profit(%)),
+    then returns a cleaned data (without negative costs) with a column of return on investment calculated and added."""
+    cleaned_data = []
+    with open(csv_file, 'r', encoding='UTF-8') as f:
         reader = csv.reader(f)
         next(reader)  # skip header row
         for row in reader:
-            list_of_shares.append((row[0], int(row[1]), float(row[2]), float(int(row[1]) * float(row[2]))))
-    return list_of_shares
+            name = row[0]
+            # since the prices in the sienna files are floats with 2 decimal values, we multiply the costs by 100
+            # to convert them into integers - so that we can maximize the total return values
+            # by using the full cost values - then we divide the total cost and return amount by 100
+            # to get the accurate values.
+            cost = int(float(row[1]) * 100)
+            profit = float(row[2]) / 100
+            return_on_investment = profit * cost
+            if cost > 0 and profit > 0:
+                cleaned_data.append({"name": name, "cost": cost, "profit": profit, "value": return_on_investment})
+    return cleaned_data
 
 
-def knapsack_01_recursive_dp(capacity, weights, values, n):
+def get_sienna_solution_values(text_file):
+    """ Reads and returns the Sienna-solution-text-files data."""
+    with open(text_file, 'r', encoding='UTF-8') as file:
+        lines = [line.strip() for line in file]
+        shares = [line[:10] for line in lines if line.startswith('Share')]
+        total_cost = [line[12:] for line in lines if line.startswith('Total cost: ')]
+        total_return = [line[8:] for line in lines if line.startswith('Profit: ')] or \
+                       [line[14:] for line in lines if line.startswith('Total return: ')]
+    return shares, total_cost, total_return
+
+
+def optimized_dynamic(max_cost, dataset):
+    """Function that returns the best combination of shares and their total cost and profits for a budget of 'max_cost'
+    using dynamic programing.
+    This function has time and space complexity = max_cost * len(dataset).
     """
-    Recursive function that returns the maximum value that can be put in a knapsack
-    of capacity 'capacity', the items with weights 'weights', and values 'values' up to index 'n'.
-    This function has exponential time complexity, as it considers all possible combinations of items.
-    weights = costs
-    values = return
-    """
-    # base conditions
-    if n == 0 or capacity == 0:
-        return 0, []
 
-    # memoization
-    if table[n][capacity] != -1:
-        return table[n][capacity]
+    # We create a matrix (table) where the rows are the shares,
+    # and the columns are the max_weight amounts.
+    # Then we initialize the table with zeros.
+    items = len(cleaned_dataset)
+    table = [[0 for x in range(max_cost + 1)] for y in range(items + 1)]
 
-    # if weight of the nth item is more than Knapsack capacity,
-    # then this item cannot be included in the optimal solution
-    if weights[n - 1] > capacity:
-        result = knapsack_01_recursive_dp(capacity, weights, values, n - 1)
-        table[n][capacity] = result
-        return result
+    # 1st: iterate over rows = dataset --> height
+    for index in range(1, len(dataset) + 1):
+        # 2nd: iterate over columns = max_costs --> width
+        for max_cost_i in range(1, max_cost + 1):
+            # check whether the item at row[index]
+            # costs more than the cost at column[max_cost_i]
+            if dataset[index - 1]['cost'] > max_cost_i:
+                # if so, table[index] value in that column is the value above = table[index - 1]
+                table[index][max_cost_i] = table[index - 1][max_cost_i]
+                # continue
+            # else, if item at row[index] costs less than or equal to the cost at column[max_weight_i]
+            # Choose the option that gives the maximum value
+            else:
+                # ==> prior_value = value above
+                prior_value = table[index - 1][max_cost_i]
+                # ==> new_option_best is value of current item + val of remaining weight
+                new_best = dataset[index - 1]['value'] + table[index - 1][max_cost_i - dataset[index - 1]['cost']]
+                # table[index] value = max between prior_value and new_option_best
+                table[index][max_cost_i] = max(prior_value, new_best)
 
-    # else, consider two cases: 1) nth item included  or 2) nth item not included
-    else:
-        # (1) item included: the fn recurses on the n-1 items with the remaining capacity reduced
-        #     by the weight of the nth item
-        included_value, included_items = knapsack_01_recursive_dp(capacity - weights[n - 1], weights, values, n - 1)
-        # value_included += values[n - 1]
-        # (2) not included : the function recurses on the n-1 items with the original capacity
-        excluded_value, excluded_items = knapsack_01_recursive_dp(capacity, weights, values, n - 1)
+    # Initialize selected_shares and total_cost
+    selected_shares = []
+    total_cost = 0
 
-        # Choose the option that gives the maximum value
-        if included_value + values[n - 1] > excluded_value:
-            result = included_value + values[n - 1], included_items + [n - 1]
+    # After computing the entire table,the last value is the maximum returned value.
+    max_return = table[items][max_cost]
+
+    # i = rows of the table, j = columns
+    i = items
+    j = max_cost
+
+    # As long as there are rows and columns to iterate over
+    while i > 0 and j > 0:
+        # Starting from the bottom-right corner of the table:
+        # If the value at row[i] is different
+        # from the value above row[i-1], then we know the [i-1]th item was selected.
+        # So, if the value at index[i] does not increase ==> share not included.
+        if table[i][j] == table[i - 1][j]:
+            # we move to the cell on the left.
+            i -= 1
         else:
-            result = excluded_value, excluded_items
-        table[n][capacity] = result
-        return result
+            # If the value increases ==> (share included),
+            # we add the share to the list of selected shares, increment the total cost,
+            # then and move to previous cell in the table.
+            selected_shares.append(dataset[i - 1]['name'])
+            total_cost += dataset[i - 1]['cost']
+            j -= dataset[i - 1]['cost']
+            i -= 1
+
+    return max_return, total_cost, selected_shares[::-1]
 
 
 # Driver code
 if __name__ == '__main__':
+    # Initialize max_cost and datasets.
+    # since the costs are multiplied by 100 to convert them into integers, we multiply the max_cost also by 100
+    # then we divide the results displayed by 100 to get the accurate values.
+    MAX_COST = 500 * 100
+    DATASETS = {'Initial dataset': ['data/initial_dataset.csv'],
+                'Sienna dataset 1': ['data/dataset1_Python+P7.csv', 'data/solution1_Python+P7.txt'],
+                'Sienna dataset 2': ['data/dataset2_Python+P7.csv', 'data/solution2_Python+P7.txt']
+                }
+    for k, v in DATASETS.items():
 
-    # extract the data
-    share_list = convert_csv_to_list(INITIAL_DATA)
+        # extract the data
+        cleaned_dataset = get_cleaned_data(v[0])
 
-    # calculate the function parameters:
-    share_weights = [s[1] for s in share_list]
-    share_profits = [s[2] for s in share_list]
-    share_values = [s[3] for s in share_list]
-    Wmax = MAX_COST
-    items = len(share_values)
+        # compile results & calculate execution time
+        start_time = time.time()
+        best_return_value, best_total_cost, best_shares = optimized_dynamic(MAX_COST, cleaned_dataset)
+        end_time = time.time()
 
-    # We create a matrix where the share_values are the rows, and the max weights are the columns,
-    # then initialize it with -1 at first.
-    table = [[-1 for i in range(Wmax + 1)] for j in range(items + 1)]
+        # display results
+        print("")
+        print(f'***** Optimized solution results - {k} *****')
+        # we divide the results by 100 to get the accurate values
+        print(f'Budget: {MAX_COST / 100}€')
+        print(f'Best combination of shares: {best_shares}')
+        print(f'Total cost: {round(best_total_cost / 100, 2)}€')
+        print(f'Total return: {round(best_return_value / 100, 2)}€')
+        print("")
+        print(f'Execution time: {end_time - start_time:.4f} seconds')
 
-    # compile results & calculate execution time
-    start_time = time.time()
-    best_return_value, best_combination_indices = knapsack_01_recursive_dp(Wmax, share_weights, share_values, items)
-    end_time = time.time()
-
-    # display results
-    print("")
-    print("*********Results - Initial Dataset***********")
-    print("Budget:", "€", Wmax)
-    print("Best combination of shares:", [share_list[i][0] for i in sorted(best_combination_indices)])
-    print("Total cost:", "€", (sum(share_weights[i] for i in best_combination_indices)))
-    print("Total return:", "€", round(best_return_value, 2))
-    print("")
-    print(f'Execution time: {end_time - start_time:.4f} seconds')
+        # Display previous solutions for Sienna datasets.
+        if not k == 'Initial dataset':
+            sienna_shares, sienna_total_cost, sienna_total_return = get_sienna_solution_values(v[1])
+            print('---------------')
+            print(f"Sienna's choices: \n"
+                  f"  Shares bought: {sorted(sienna_shares)}\n"
+                  f"  Total cost: {sienna_total_cost[0]} \n"
+                  f"  Total return: {sienna_total_return[0]} \n"
+                  f"  Bought by sienna but not in Optimized: {[x for x in sienna_shares if x not in best_shares]} \n"
+                  f"  In Optimized but not bought by Sienna: {[x for x in best_shares if x not in sienna_shares]}")
+        print("****************************************************************")
