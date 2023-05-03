@@ -12,9 +12,9 @@ a memory-efficient algorithm that reads the information about shares from a file
 then suggest a list of the most profit-yielding ones within the constraints.
 
 **Constraints:**
-Each share can only be bought once.
-We cannot buy a fraction of a share.
-We can spend at most 500 euros.
+- Each share can only be bought once.
+- We cannot buy a fraction of a share.
+- We can spend at most 500 euros.
 
 This problem is known as the 01 knapsack problem.
 
