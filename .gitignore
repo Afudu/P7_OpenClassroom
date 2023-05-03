@@ -6,7 +6,6 @@ __pycache__/
 
 
 # Project
-*.csv
 *.png
 *.jpg
 *.jpeg
@@ -18,6 +17,7 @@ Reserves/
 Tests/
 Notes/
 data/save/
+data/old/
 knapsack/
 
 # Translations
