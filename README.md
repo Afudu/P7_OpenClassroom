@@ -1,4 +1,4 @@
-# OpenClassroom - Python Developer Path
+# OpenClassrooms - Python Developer Path
 
 **Project 7:** Solve Problems Using Algorithms in Python
 
@@ -8,9 +8,30 @@
 
 # Abstract
 This project consists of designing for a client, AlgoInvest&Trade, 
-an algorithm that will maximize their clients’ profits after two years of investment, 
-an algorithm capable of trying out all the different combinations of shares that fit the constraints, 
-and choose the most profit-yielding shares to buy in less than a second. 
+a memory-efficient algorithm that reads the information about shares from a file, 
+then suggest a list of the most profit-yielding ones within the constraints.
+
+**Constraints:**
+Each share can only be bought once.
+We cannot buy a fraction of a share.
+We can spend at most 500 euros.
+
+This problem is known as the 01 knapsack problem.
+
+The client would like to approach the resolution of the problem in two parts:
+
+**Part1:** We create first for a list of 20 shares, a brute-force solution that will try out 
+all the different combinations of shares then return the combination with the highest profit within the constraints. 
+The implementation of this part is the [ bruteforce.py ] script in the root of this repository, 
+which uses a built-in python function, itertools, to solve problem. 
+The execution time is about 2sec on a PC with good performance.
+
+**Part2:** Then create an optimized version of the brute-force solution capable of returning 
+the same results for the list of 20 shares in less than one second.
+Then lastly test the optimized solution on past datasets with 1000 shares and compare the results.
+
+The implementation of this part is the [ optimized.py ] script in the root of this repository, 
+using dynamic programming. It returns the results for the list of the 20 shares in less than a second.
 
 # Requirement
 
