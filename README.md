@@ -23,12 +23,12 @@ We will approach the resolution of the problem in two parts:
 **Part1:** We create first for a list of 20 shares, a brute-force solution that will try out 
 all the different combinations of shares then return the combination with the highest profit within the constraints. 
 The implementation of this part is the [ bruteforce.py ] script in the root of this repository, 
-which uses a built-in python function, itertools, to solve problem. 
+which uses a built-in python function, itertools, to solve the problem. 
 The execution time is about 2sec on a PC with good performance.
 
-**Part2:** Then create an optimized version of the brute-force solution capable of returning 
+**Part2:** Then we create an optimized version of the brute-force solution capable of returning 
 the same results for the list of 20 shares in less than one second.
-Then lastly test the optimized solution on past datasets with 1000 shares and compare the results.
+And lastly we test the optimized solution on past datasets with 1000 shares and compare the results.
 
 The implementation of this part is the [ optimized.py ] script in the root of this repository, 
 using dynamic programming, and which should return the results for the list of the 20 shares in less than a second.
