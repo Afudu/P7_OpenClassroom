@@ -31,7 +31,7 @@ the same results for the list of 20 shares in less than one second.
 Then lastly test the optimized solution on past datasets with 1000 shares and compare the results.
 
 The implementation of this part is the [ optimized.py ] script in the root of this repository, 
-using dynamic programming. It returns the results for the list of the 20 shares in less than a second.
+using dynamic programming, and which should return the results for the list of the 20 shares in less than a second.
 
 # Requirement
 
