@@ -17,10 +17,11 @@ def get_cleaned_data(csv_file):
         for row in reader:
             name = row[0]
             # With the values of the costs which are floats with 2 decimal values,
-            # - using them as such will return a TypeError on the evaluation of the remaining cost (in line 71).
+            # - using them as such will return a TypeError on the evaluation of the remaining cost (in line 72).
             # - and rounding them will lead to inaccurate results
             # To get accurate results and prevent TypeErrors, we multiply the costs by 100 to convert them into integers,
             # then we divide the results by 100.
+            # Ex: If dataset = [1.01, 2.04], then dataset[2 - dataset[1]] will raise a TypeError.
             cost = int(float(row[1]) * 100)
             profit = float(row[2]) / 100
             return_on_investment = profit * cost
