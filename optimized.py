@@ -2,8 +2,8 @@ import csv
 import time
 
 """
-This script contains the implementation of Part2 of the Project Brief: create “optimized.py”.
-The optimized version of bruteforce.py
+This script contains the implementation of Part2 of the Project Brief: create “optimized.py”, 
+the optimized version of the bruteforce.py script.
 """
 
 
@@ -16,10 +16,11 @@ def get_cleaned_data(csv_file):
         next(reader)  # skip header row
         for row in reader:
             name = row[0]
-            # since the prices in the sienna files are floats with 2 decimal values, we multiply the costs by 100
-            # to convert them into integers - so that we can maximize the total return values
-            # by using the full cost values - then we divide the total cost and return amount by 100
-            # to get the accurate values.
+            # With the values of the costs which are floats with 2 decimal values,
+            # - using them as such will return a TypeError on the evaluation of the remaining cost (in line 71).
+            # - and rounding them will lead to inaccurate results
+            # To get accurate results and prevent TypeErrors, we multiply the costs by 100 to convert them into integers,
+            # then we divide the results by 100.
             cost = int(float(row[1]) * 100)
             profit = float(row[2]) / 100
             return_on_investment = profit * cost
