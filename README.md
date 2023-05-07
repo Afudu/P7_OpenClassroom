@@ -75,7 +75,7 @@ The following commands rely on the knowledge of how to use the terminal (Unix, m
 
 # Running the application
 
-To run each of the four scripts, in the terminal (Unix, macOS) or command line (Windows):
+To run each of the two scripts, in the terminal (Unix, macOS) or command line (Windows):
 
 python script_file.py
 
