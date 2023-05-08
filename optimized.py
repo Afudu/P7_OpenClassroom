@@ -16,12 +16,13 @@ def get_cleaned_data(csv_file):
         next(reader)  # skip header row
         for row in reader:
             name = row[0]
-            # With the values of the costs which are floats with 2 decimal values,
-            # - using them as such will return a TypeError on the evaluation of the remaining cost (in line 72).
-            # - and rounding them will lead to inaccurate results
+            # With the costs that float-points with 2 decimal values in the two old datasets:
+            # dataset1_Python+P7.csv and dataset2_Python+P7.csv
+            # i/ using them as such will return a TypeError on the evaluation of the remaining cost (in line 73).
+            # Ex: If Costs = [1.01, 2.04], then Costs[2 - Costs[1]] will raise a TypeError.
+            # ii/ and rounding them up or down will lead to inaccurate results.
             # To get accurate results and prevent TypeErrors, we multiply the costs by 100 to convert them into integers,
             # then we divide the results by 100.
-            # Ex: If dataset = [1.01, 2.04], then dataset[2 - dataset[1]] will raise a TypeError.
             cost = int(float(row[1]) * 100)
             profit = float(row[2]) / 100
             return_on_investment = profit * cost
@@ -31,7 +32,7 @@ def get_cleaned_data(csv_file):
 
 
 def get_sienna_solution_values(text_file):
-    """ Reads and returns the Sienna-solution-text-files data."""
+    """ Reads and returns the Sienna-solution-text-files in data/ folder."""
     with open(text_file, 'r', encoding='UTF-8') as file:
         lines = [line.strip() for line in file]
         shares = [line[:10] for line in lines if line.startswith('Share')]
