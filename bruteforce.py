@@ -20,8 +20,8 @@ DATASET = 'data/initial_dataset.csv'
 
 
 def convert_csv_to_list(csv_file):
-    """ This function reads a csv file with initially 3 columns (name, cost, and profit(%)),
-    converts its data into a list and adds a column for the return on investment."""
+    """ This function reads a csv file with initially 3 columns (name, cost, and profit(%) - where cost and
+    profit are both integers) converts its data into a list and then adds a column for the return on investment."""
     shares = []
     with open(csv_file, 'r') as f:
         reader = csv.reader(f)
@@ -29,7 +29,7 @@ def convert_csv_to_list(csv_file):
         for row in reader:
             name = row[0]
             cost = int(row[1])
-            profit = float(int(row[2]) / 100)
+            profit = int(row[2]) / 100
             roi = profit * cost
             shares.append({"name": name, "cost": cost, "profit": profit, "return_on_investment": roi})
     return shares
