@@ -9,7 +9,7 @@ with 2 decimal values are rounded down, as keeping them as such will return a Ty
 on the evaluation of the remaining cost (in line 82). List indices must be integers or slices, not float.
 Ex: If dataset = [1.01, 2.04], then dataset[2 - dataset[1]] will raise a TypeError.
 
-To prevent this error, the values of the costs are rounded down with round() function.
+To prevent this error, the values of the costs are rounded up or down with round() function.
 """
 
 
