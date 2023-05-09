@@ -57,7 +57,8 @@ def bruteforce_shares(max_cost, dataset):
     """
     The function reads in a CSV file containing share data, loops over the list, uses
     itertools.combinations to generate all possible combinations of shares less or equal to max_cost,
-    then calculates the best cost, return and shares.
+    then calculates the best total_cost, total_return and shares.
+    Time complexity: 2^n where n = len(dataset).
     """
 
     # convert csv_file to list of key/value pairs
