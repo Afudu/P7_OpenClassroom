@@ -90,20 +90,15 @@ def optimized_dynamic(max_cost, dataset):
         # Starting from the bottom-right corner of the table:
         # If the value at row[i] is different
         # from the value above row[i-1], then we know the [i-1]th item was selected.
-        # So, if the value at index[i] does not increase ==> share not included.
-        if table[i][j] == table[i - 1][j]:
-            # we move to the cell on the left.
-            i -= 1
-        else:
-            # If the value increases ==> (share included),
-            # we add the share to the list of selected shares, increment the total cost,
-            # then and move to previous cell in the table.
+        # We add the share to the list of selected shares, increment the total cost,
+        # then move to previous cell in the table.
+        if table[i][j] != table[i - 1][j]:
             selected_shares.append(dataset[i - 1]['name'])
             total_cost += dataset[i - 1]['cost']
             j -= dataset[i - 1]['cost']
-            i -= 1
-
-    return max_return, total_cost, selected_shares[::-1]
+        i -= 1
+    selected_shares.reverse()
+    return max_return, total_cost, selected_shares
 
 
 # Driver code
