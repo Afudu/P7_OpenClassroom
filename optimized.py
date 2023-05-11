@@ -15,6 +15,7 @@ def get_cleaned_data(csv_file):
         reader = csv.reader(f)
         next(reader)  # skip header row
         for row in reader:
+            # redefine the columns
             name = row[0]
             # With the costs that float-points with 2 decimal values in the two old datasets:
             # dataset1_Python+P7.csv and dataset2_Python+P7.csv
@@ -27,7 +28,11 @@ def get_cleaned_data(csv_file):
             profit = float(row[2]) / 100
             return_on_investment = profit * cost
             if cost > 0 and profit > 0:
-                cleaned_data.append({"name": name, "cost": cost, "profit": profit, "value": return_on_investment})
+                cleaned_data.append({"name": name,
+                                     "cost": cost,
+                                     "profit": profit,
+                                     "value": return_on_investment
+                                     })
     return cleaned_data
 
 
@@ -55,24 +60,24 @@ def optimized_dynamic(max_cost, dataset):
     table = [[0 for x in range(max_cost + 1)] for y in range(items + 1)]
 
     # 1st: iterate over rows = dataset --> height
-    for index in range(1, len(dataset) + 1):
+    for i in range(1, len(dataset) + 1):
         # 2nd: iterate over columns = max_costs --> width
         for max_cost_i in range(1, max_cost + 1):
-            # check whether the item at row[index]
+            # check whether the item at row[i]
             # costs more than the cost at column[max_cost_i]
-            if dataset[index - 1]['cost'] > max_cost_i:
-                # if so, table[index] value in that column is the value above = table[index - 1]
-                table[index][max_cost_i] = table[index - 1][max_cost_i]
+            if dataset[i - 1]['cost'] > max_cost_i:
+                # if so, table[i] value in that column is the value above = table[i - 1]
+                table[i][max_cost_i] = table[i - 1][max_cost_i]
                 # continue
             # else, if item at row[index] costs less than or equal to the cost at column[max_weight_i]
             # Choose the option that gives the maximum value
             else:
                 # ==> prior_value = value above
-                prior_value = table[index - 1][max_cost_i]
+                prior_value = table[i - 1][max_cost_i]
                 # ==> new_option_best is value of current item + val of remaining weight
-                new_best = dataset[index - 1]['value'] + table[index - 1][max_cost_i - dataset[index - 1]['cost']]
-                # table[index] value = max between prior_value and new_option_best
-                table[index][max_cost_i] = max(prior_value, new_best)
+                new_best = dataset[i - 1]['value'] + table[i - 1][max_cost_i - dataset[i - 1]['cost']]
+                # table[i] value = max between prior_value and new_option_best
+                table[i][max_cost_i] = max(prior_value, new_best)
 
     # Initialize selected_shares and total_cost
     selected_shares = []
@@ -90,8 +95,10 @@ def optimized_dynamic(max_cost, dataset):
         # Starting from the bottom-right corner of the table:
         # If the value at row[i] is different
         # from the value above row[i-1], then we know the [i-1]th item was selected.
-        # We add the share to the list of selected shares, increment the total cost,
-        # then move to previous cell in the table.
+        # We add the share to the list of selected shares,
+        # increment the total cost,
+        # get the remaining cost j = j - dataset[i - 1]['cost']
+        # then move to the previous cell in the table.
         if table[i][j] != table[i - 1][j]:
             selected_shares.append(dataset[i - 1]['name'])
             total_cost += dataset[i - 1]['cost']
@@ -125,7 +132,7 @@ if __name__ == '__main__':
         print("")
         print(f'***** Optimized solution results - {k} *****')
         # we divide the results by 100 to get the accurate values
-        print(f'Budget: {MAX_COST / 100}€')
+        print(f'Budget: {int(MAX_COST / 100)}€')
         print(f'Best combination of shares: {best_shares}')
         print(f'Total cost: {round(best_total_cost / 100, 2)}€')
         print(f'Total return: {round(best_return_value / 100, 2)}€')
