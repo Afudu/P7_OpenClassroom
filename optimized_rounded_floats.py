@@ -91,24 +91,24 @@ def optimized_dynamic(max_cost, dataset):
     table = [[0 for x in range(max_cost + 1)] for y in range(items + 1)]
 
     # 1st: iterate over rows = dataset --> height
-    for index in range(1, len(dataset) + 1):
+    for i in range(1, len(dataset) + 1):
         # 2nd: iterate over columns = max_costs --> width
         for max_cost_i in range(1, max_cost + 1):
             # check whether the item at row[index]
             # costs more than the cost at column[max_cost_i]
-            if dataset[index - 1]['cost'] > max_cost_i:
+            if dataset[i - 1]['cost'] > max_cost_i:
                 # if so, table[index] value in that column is the value above = table[index - 1]
-                table[index][max_cost_i] = table[index - 1][max_cost_i]
+                table[i][max_cost_i] = table[i - 1][max_cost_i]
                 # continue
             # else, if item at row[index] costs less than or equal to the cost at column[max_weight_i]
             # Choose the option that gives the maximum value
             else:
                 # ==> prior_value = value above
-                prior_value = table[index - 1][max_cost_i]
+                prior_value = table[i - 1][max_cost_i]
                 # ==> new_option_best is value of current item + val of remaining weight
-                new_best = dataset[index - 1]['value'] + table[index - 1][max_cost_i - dataset[index - 1]['cost']]
+                new_best = dataset[i - 1]['value'] + table[i - 1][max_cost_i - dataset[i - 1]['cost']]
                 # table[index] value = max between prior_value and new_option_best
-                table[index][max_cost_i] = max(prior_value, new_best)
+                table[i][max_cost_i] = max(prior_value, new_best)
 
     # Initialize selected_shares and total_cost
     selected_shares = []
@@ -126,20 +126,15 @@ def optimized_dynamic(max_cost, dataset):
         # Starting from the bottom-right corner of the table:
         # If the value at row[i] is different
         # from the value above row[i-1], then we know the [i-1]th item was selected.
-        # So, if the value at index[i] does not increase ==> share not included,
-        # we move to the cell on the left.
-        if table[i][j] == table[i - 1][j]:
-            i -= 1
-        else:
-            # If the value increases ==> (share included),
-            # we add the share to the list of selected shares and move to the
-            # previous cell in the table.
+        # We add the share to the list of selected shares, increment the total cost,
+        # then move to previous cell in the table.
+        if table[i][j] != table[i - 1][j]:
             selected_shares.append(dataset[i - 1]['name'])
             total_cost += dataset[i - 1]['cost']
             j -= dataset[i - 1]['cost']
-            i -= 1
-
-    return max_return, total_cost, selected_shares[::-1]
+        i -= 1
+    selected_shares.reverse()
+    return max_return, total_cost, selected_shares
 
 
 # Driver code
