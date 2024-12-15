@@ -6,7 +6,7 @@ __pycache__/
 
 
 # Project
-*.png
+# *.png
 *.jpg
 *.jpeg
 *.zip
