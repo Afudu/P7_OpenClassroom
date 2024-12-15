@@ -7,7 +7,7 @@ This script contains the implementation of Part1 of the Project Brief: create �
 Details:
     The program needs to:
      - read a file containing information about shares,
-     - explore all the possible combinations, 
+     - explore all the possible combinations,
      - and display the best investment.
     Constraints:
        - Each share can only be bought once.
@@ -90,9 +90,15 @@ end_time = time.time()
 # display results
 print("")
 print("*********Results - Initial Dataset***********")
+print("")
+print(f'Number of Shares: {len(convert_csv_to_list(DATASET))}')
+print("")
 print(f'Budget: {MAX_COST}€')
+print("")
 print(f'Best combination of shares({len(best_shares_list)}): {get_share_names(best_shares_list)}')
+print("")
 print(f'Total cost: {best_cost_value}€')
+print("")
 print(f'Total return value: {round(best_return_value, 2)}€')
 print("")
 print(f'Execution time: {end_time - start_time:.4f} seconds')
