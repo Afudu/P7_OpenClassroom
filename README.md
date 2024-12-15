@@ -1,88 +1,118 @@
-# OpenClassrooms - Python Developer Path
+# Solve Problems Using Algorithms in Python
 
-**Project 7:** Solve Problems Using Algorithms in Python
+**OpenClassrooms - Python Developer Path:** Project 7
 
 **Student:** Abdoul Baki Seydou
 
-**Date:** 04/04/2023
+**Date:** 04/04/2023 
 
-# Abstract
-This project consists of designing for a client, AlgoInvest&Trade, 
+## Table of Contents
+1. [Summary](#summary)
+2. [Constraints](#constraints)
+3. [Technologies Used](#technologies-used)
+4. [Project Tasks](#project-tasks)
+5. [Local Development](#local-development)
+   - [Prerequisites](#prerequisites)
+   - [Setup on macOS/Linux](#setup-on-macoslinux)
+   - [Setup on Windows](#setup-on-windows)
+   - [Running the Application](#running-the-application)
+   - [Linting](#linting)
+   - [Screenshots](#screenshots)
+
+## Summary
+This project consists of designing for a client, **AlgoInvest&Trade**, 
 a memory-efficient algorithm that reads the information about shares from a file, 
 then suggest a list of the most profit-yielding ones within the constraints.
 
-**Constraints:**
+## Constraints
 - Each share can only be bought once.
-- We cannot buy a fraction of a share.
-- We can spend at most 500 euros.
-
+- A fraction of a share cannot be bought.
+- Maximum amount to spend is: 500 euros.
 This problem is known as the 01 knapsack problem.
 
-We will approach the resolution of the problem in two parts:
+## Technologies Used
+- **Programming Languages:** Python
+- **Libraries:** Csv, itertools, time.
+- **Database:** Data read from text files.
 
-**Part1:** We create first for a list of 20 shares, a brute-force solution that will try out 
-all the different combinations of shares then return the combination with the highest profit within the constraints. 
-The implementation of this part is the [ bruteforce.py ] script in the root of this repository, 
-which uses a built-in python function, itertools, to solve the problem. 
-The execution time is about 2sec on a PC with good performance.
+## Project Tasks
+We will approach the resolution of the problem in 3 parts:
 
-**Part2:** Then we create an optimized version of the brute-force solution capable of returning 
+- **Part1: Bruteforce solution** for a list of 20 shares, we create a brute-force solution will try out 
+all the different combinations of shares then return the combination with the highest profit within the constraints.
+
+- **Part2: Optimized solution for 20 shares** Creation of an optimized version of the brute-force solution capable of returning 
 the same results for the list of 20 shares in less than one second.
-And lastly we test the optimized solution on past datasets with 1000 shares and compare the results.
 
-The implementation of this part is the [ optimized.py ] script in the root of this repository, 
-using dynamic programming, and which should return the results for the list of the 20 shares in less than a second.
+- **Part3: Optimized solution for 1000 shares** We test the optimized solution on past datasets with 1000 shares and compare the results.
 
-# Requirement
+## Local Development
 
-Latest version of Python must be installed.
+### Prerequisites
+- Python 3.6 or higher.
 
-You can download the latest version for your system from : https://www.python.org/downloads/
+### Setup on macOS/Linux
 
-# Installation
+1. **Clone the Repository**
+   ```bash
+   cd /path/to/put/project/in
+   git clone https://github.com/Afudu/P7_OpenClassroom.git
 
-The following commands rely on the knowledge of how to use the terminal (Unix, macOS) or the command line (Windows).
+2. **Move to the folder**
+   ```bash
+   cd P7_OpenClassroom
 
-**1 - Get the code**
+3. **Set Up Virtual Environment**
+   ```bash
+   python -m venv venv
+   
+4. **Activate Environment**
+   ```bash
+   source venv/bin/activate 
+   
+5. **Securely upgrade pip**
+   ```bash
+   python -m pip install --upgrade pip 
 
-  * $ git clone https://github.com/Afudu/P7_OpenClassroom.git
+6. **Install dependencies**
+   ```bash
+   pip install -r requirements.txt
+   
+7. **To deactivate Environment**
+   ```bash
+   deactivate
 
-**2 - Move to the folder**
+### Setup on Windows
 
-  * Unix/macOS/Windows: cd P7_OpenClassroom
+1. Follow the steps above.
 
-**3 - Create a virtual environment**
+2. To activate the environment:
+   ```bash
+   venv\Scripts\Activate
 
-  * Unix/macOS: $ python3 -m venv pythonenv
-  * Windows: py -m venv pythonenv
+### Running the application
+
+* The repository contains two scripts:
+
+    **1 -** bruteforce.py : extracts the data of a single book.
+
+    **2 -** optimized.py : extracts the data of all books in a single category.
+
+* To run each of the scripts:
+   ```bash
+   python script_file.py
   
-    * Note: you can create the virtual environment in another folder, then move to that folder to run the command above.
-    * Example: in the above command, our virtual environment created is called pythonenv - you can give a different name.
+* The data is read from the files in the ```data``` folder.
 
-**4 - Activate the virtual environment created**
+### Linting
 
-  * Unix/macOS: $ source pythonenv/bin/activate
+- To run Linting:
+  ````bash
+  flake8
 
-  * Windows: pythonenv\Scripts\activate
+## Screenshots
 
-**5 - Securely upgrade pip**
+![Bruteforce Results](screenshots/bruteforce.png "Bruteforce Results")
 
- * Unix/macOS/Windows: pip install --upgrade pip
 
-**6 - Install all dependencies**
-
- * Unix/macOS/Windows: pip install -r requirements.txt
-
-# Running the application
-
-To run each of the two scripts, in the terminal (Unix, macOS) or command line (Windows):
-
-python script_file.py
-
-# PEP 8 adherence
-
-The folder 'flake_report' in the repository contains an HTML report generated by flake8-html which displays no errors.
-A new report can be generated by running the following command in the terminal (Unix, macOS) 
-or command line (Windows): flake8
-
-The file setup.cfg in the root of the repository contains the settings used to generate the report.
+![Optimized Results](screenshots/optimized.png "Optimized Results")
