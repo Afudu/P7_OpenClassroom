@@ -38,10 +38,10 @@ The algorithm operates under the following constraints:
 - **Data Source:** Share data stored in text files.
 
 ## Project Tasks
-The resolution of the problem is splited into three parts:
+The resolution of the problem is split into three parts:
 
 - **Part1: A Bruteforce solution:** For a list of 20 shares, a brute-force solution is implemented to evaluate
-all possiblecombinations. It identifies the most profitable within the budget constraints.
+all possible combinations. It identifies the most profitable within the budget constraints.
 
 - **Part2: An Optimized solution for a list of 20 shares:** An optimized version of the brute-force is developed 
    to achieve the same results under one second.
@@ -114,7 +114,7 @@ The codebase is fully linted and free of errors.
   ````bash
   flake8
 
-## Screenshots
+### Screenshots
 
 ![Bruteforce Results](screenshots/bruteforce.png "Bruteforce Results")
 
