@@ -20,31 +20,34 @@
    - [Screenshots](#screenshots)
 
 ## Summary
-This project consists of designing for a client, **AlgoInvest&Trade**, 
-a memory-efficient algorithm that reads the information about shares from a file, 
-then suggest a list of the most profit-yielding ones within the constraints.
+This project consists of designing a memory-efficient algorithm for **AlgoInvest&Trade**.
+The goal is to process share data from a file and suggest a list of the most profitable 
+shares to invest in while adhering to predefined constraints.
+
+This problem tackled here is a variation of the **01 Knapsack Problem**.
 
 ## Constraints
+The algorithm operates under the following constraints:
 - Each share can only be bought once.
 - A fraction of a share cannot be bought.
 - Maximum amount to spend is: 500 euros.
-This problem is known as the 01 knapsack problem.
 
 ## Technologies Used
 - **Programming Languages:** Python
 - **Libraries:** Csv, itertools, time.
-- **Database:** Data read from text files.
+- **Data Source:** Share data stored in text files.
 
 ## Project Tasks
-We will approach the resolution of the problem in 3 parts:
+The resolution of the problem is splited into three parts:
 
-- **Part1: Bruteforce solution** for a list of 20 shares, we create a brute-force solution will try out 
-all the different combinations of shares then return the combination with the highest profit within the constraints.
+- **Part1: A Bruteforce solution:** For a list of 20 shares, a brute-force solution is implemented to evaluate
+all possiblecombinations. It identifies the most profitable within the budget constraints.
 
-- **Part2: Optimized solution for 20 shares** Creation of an optimized version of the brute-force solution capable of returning 
-the same results for the list of 20 shares in less than one second.
+- **Part2: An Optimized solution for a list of 20 shares:** An optimized version of the brute-force is developed 
+   to achieve the same results under one second.
 
-- **Part3: Optimized solution for 1000 shares** We test the optimized solution on past datasets with 1000 shares and compare the results.
+- **Part3: An Optimized solution for 1000 shares** The optimized algorithm is tested on a dataset of 1000 shares 
+    to validate its performance and efficiency.
 
 ## Local Development
 
@@ -94,19 +97,20 @@ the same results for the list of 20 shares in less than one second.
 
 * The repository contains two scripts:
 
-    **1 -** bruteforce.py : extracts the data of a single book.
+    **1 -** bruteforce.py : Executes the bruteforce solution for a list of 20 shares.
 
-    **2 -** optimized.py : extracts the data of all books in a single category.
+    **2 -** optimized.py : Executes the optimized solution for a list of 20 shares, and a list of 1000 shares.
 
-* To run each of the scripts:
+* To run each script:
    ```bash
-   python script_file.py
+   python script_file_name.py
   
-* The data is read from the files in the ```data``` folder.
+* Data is read from the ```data``` directory.
 
 ### Linting
+The codebase is fully linted and free of errors.
 
-- To run Linting:
+- To Run Linting:
   ````bash
   flake8
 
